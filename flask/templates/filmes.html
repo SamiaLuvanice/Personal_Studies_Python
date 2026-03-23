@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% block conteudo %}
+
+<h2 style="text-align: center">Lista de Filmes</h2>
+<hr />
+
+<div class="row g-3">
+  {% if filmes %} {% for filme in filmes %}
+  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+    <div class="card h-100">
+      <img
+        src="https://image.tmdb.org/t/p/w500{{ filme.backdrop_path or filme.poster_path }}"
+        class="card-img-top"
+        alt="{{ filme.title or filme.name }}"
+      />
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ filme.title or filme.name or ('ID: ' ~ filme.id) }}
+        </h5>
+        <p class="card-text">
+          {{ (filme.overview or 'Sem descrição disponível.')[:180] }}{% if
+          filme.overview and filme.overview|length > 180 %}...{% endif %}
+        </p>
+        <hr />
+        <h4>
+          Nota Média:
+          <span class="badge bg-secondary">{{ filme.vote_average }}</span>
+        </h4>
+      </div>
+    </div>
+  </div>
+  {% endfor %} {% else %}
+  <p>Nenhum filme encontrado no momento.</p>
+  {% endif %}
+</div>
+
+{% endblock conteudo %}

@@ -1,27 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notas da Turma</title>
-</head>
-<body>
-  <h2 style="text-align: center">Notas dos Alunos</h2>
-  <hr>
+{% extends 'base.html' %}{% block conteudo %}
+<h2 style="text-align: center">Notas dos Alunos</h2>
+<hr />
+<form class="form-group" action="{{url_for('diario')}}" method="POST">
+  <label>Aluno</label>
+  <input class="form-control" type="text" name="aluno" required />
+  <label>Nota</label>
+  <input class="form-control" type="text" name="nota" />
+  <button class="btn btn-success">Adicionar</button>
+</form>
+<br />
 
-  <form action="{{ url_for('diario') }}" method="POST">
-    <label for="aluno">Aluno</label>
-    <input type="text" id="aluno" name="aluno" required>
-    <label>Nota</label>
-    <input type="text" name="nota">
-    <button>Adicionar</button>
-  </form>
-
-    {% for registro in registros %}
-    <details>
-      <summary>{{ registro.aluno }}</summary>
-      <p>Nota: {{ registro.nota }}</p>
-    </details>
-    {% endfor %}
-</body>
-</html>
+{% for registro in registros %}
+<p>
+  <a
+    class="btn btn-secondary"
+    data-bs-toggle="collapse"
+    href="#collapse_{{ loop.index }}"
+    role="button"
+    aria-expanded="false"
+    aria-controls="collapse_{{ loop.index }}"
+  >
+    {{registro.aluno}}
+  </a>
+</p>
+<div class="collapse" id="collapse_{{ loop.index }}">
+  <div class="card card-body">{{registro.nota}}</div>
+</div>
+{% endfor %} {% endblock %}
