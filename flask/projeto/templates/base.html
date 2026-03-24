@@ -53,24 +53,41 @@
                 Filmes
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{{ url_for('lista_filmes', propriedade='populares') }}">Mais Populares</a></li>
-                <li><a class="dropdown-item" href="{{ url_for('lista_filmes', propriedade='mais_bem_avaliados') }}">Mais Bem Avaliados</a></li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{ url_for('lista_filmes', propriedade='populares') }}"
+                    >Mais Populares</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{ url_for('lista_filmes', propriedade='mais_bem_avaliados') }}"
+                    >Mais Bem Avaliados</a
+                  >
+                </li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
-                  <a class="dropdown-item" href="{{ url_for('lista_filmes', propriedade='2010') }}">2010</a>
+                  <a
+                    class="dropdown-item"
+                    href="{{ url_for('lista_filmes', propriedade='2010') }}"
+                    >2010</a
+                  >
                 </li>
               </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('lista_livros') }}"
+                >Livros</a
+              >
             </li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <div class="container">
-        {% block conteudo %}
-        
-        {% endblock conteudo %}
-    </div>
+    <div class="container">{% block conteudo %} {% endblock conteudo %}</div>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"

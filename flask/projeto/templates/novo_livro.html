@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+{% block conteudo %}
+<h2 class="text-center">Cadastrar Livros</h2>    
+<hr />
+<br />
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <form method="POST" action="{{ url_for('adiciona_livro') }}">
+      <div class="mb-3">
+        <label for="nome" class="form-label">Nome do Livro</label>
+        <input type="text" class="form-control" id="nome" name="nome" required>
+      </div>
+      <div class="mb-3">
+        <label for="descricao" class="form-label">Descrição</label>
+        <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="valor" class="form-label">Valor</label>
+        <input type="number" class="form-control" id="valor" name="valor" step="0.01" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Cadastrar</button>
+      <a href="{{ url_for('lista_livros') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+</div>
+{% endblock conteudo %}
