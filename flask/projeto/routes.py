@@ -40,7 +40,7 @@ def diario():
 @app.route('/filmes/<propriedade>')
 def lista_filmes(propriedade):
     return render_template(
-        'filmes.html', 
+        'filmes.html',
         filmes=buscar_filmes(tipo=propriedade)
     )
 
@@ -58,11 +58,36 @@ def adiciona_livro():
         nome = request.form.get('nome')
         descricao = request.form.get('descricao')
         valor = request.form.get('valor')
-        
+
         if nome and descricao and valor:
             novo_livro = Livro(nome=nome, descricao=descricao, valor=int(valor))
             db.session.add(novo_livro)
             db.session.commit()
             return redirect(url_for('lista_livros'))
-    
+
     return render_template('novo_livro.html')
+
+@app.route('/<int:id>/atualiza_livro', methods=['GET', 'POST'])
+def atualiza_livro(id):
+    livro_bd = Livro.query.get_or_404(id)
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        descricao = request.form.get('descricao')
+        valor = request.form.get('valor')
+
+        if nome and descricao and valor:
+            livro_bd.nome = nome
+            livro_bd.descricao = descricao
+            livro_bd.valor = int(valor)
+
+        db.session.commit()
+        return redirect(url_for('lista_livros'))
+
+    return render_template('atualiza_livro.html', livro=livro_bd)
+
+@app.route('/<int:id>/remove_livro', methods=['POST'])
+def remove_livro(id):
+    livro_bd = Livro.query.get_or_404(id)
+    db.session.delete(livro_bd)
+    db.session.commit()
+    return redirect(url_for('lista_livros'))
