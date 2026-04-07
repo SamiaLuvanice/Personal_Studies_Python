@@ -5,6 +5,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import ConfigurationError
 
 from app.models.user_model import User
+from app.models.task_model import Task
+
 from app.api.v1.router import router
 
 from contextlib import asynccontextmanager
@@ -24,7 +26,7 @@ async def lifespan(app: FastAPI):
 
     await init_beanie(
         database=database,
-        document_models=[User],
+        document_models=[User, Task],
     )
 
     app.state.mongo_client = client_db

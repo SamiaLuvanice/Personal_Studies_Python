@@ -14,16 +14,13 @@ class UserAuth(BaseModel):
     )
     password: str = Field(
         ...,
-        min_length=8,
+        min_length=5,
         max_length=128,
         description="Senha do usuário"
     )
-
-
-class UserPublic(BaseModel):
+    
+class UserDetails(BaseModel):
     user_id: UUID
     username: str
-    email: EmailStr
-    first_name: str | None = None
-    last_name: str | None = None
-    disabled: bool
+    email: str
+
