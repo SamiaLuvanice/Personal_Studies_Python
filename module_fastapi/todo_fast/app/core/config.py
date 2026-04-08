@@ -16,7 +16,10 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     REFRESH_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = Field(default_factory=list)
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
+        'http://localhost:3000',
+        'http://localhost:5173'
+    ]
     PROJECT_NAME: str = "TODOFast"
     
     MONGO_CONNECTION_STRING: str

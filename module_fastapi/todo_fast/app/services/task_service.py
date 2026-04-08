@@ -18,24 +18,23 @@ class TaskService:
         return tasks
 
     @staticmethod
-    async def get_task_by_id(task_id: UUID) -> Optional[Task]:
-        task = await Task.find_one(Task.task_id == task_id)
+    async def detail(user: User, task_id: UUID) -> Optional[Task]:
+        task = await Task.find_one(Task.task_id == task_id, Task.owner.id == user.id)
         return task
 
     @staticmethod
-    async def update_task(task_id: UUID, task_update: TaskUpdate) -> Optional[Task]:
-        task = await TaskService.get_task_by_id(task_id)
-        if not task:
-            return None
-        
-        update_data = task_update.model_dump(exclude_unset=True)
-        await task.update({"$set": update_data})
+    async def update_task(user: User, task_id: UUID, data: TaskUpdate) -> Optional[Task]:
+        task = await TaskService.detail(user, task_id)
+        await task.update({
+            "$set": data.dict(exclude_unset=True)
+        })   
+        await task.save()
         return task
 
     @staticmethod
-    async def delete_task(task_id: UUID) -> bool:
-        task = await TaskService.get_task_by_id(task_id)
+    async def delete_task(user: User, task_id: UUID) -> None:
+        task = await TaskService.detail(user, task_id)
         if not task:
-            return False
+            return
         await task.delete()
-        return True
+    

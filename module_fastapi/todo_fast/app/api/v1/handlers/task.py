@@ -3,6 +3,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from app.api.v1.handlers import user
 from app.schemas.task_schema import TaskCreate, TaskDetails, TaskUpdate
 from app.models.user_model import User
 from app.api.dependencies.user_deps import get_current_user
@@ -17,6 +18,11 @@ async def list_tasks(
 )-> List[TaskDetails]:
     return await TaskService.list_tasks_by_user(user) 
 
+@task_router.get("/{task_id}", summary="Detalhe de uma Tarefa or id", response_model=TaskDetails)
+async def detail(
+    task_id: UUID,
+    user: User = Depends(get_current_user)):
+    return await TaskService.detail(user, task_id)
 
 @task_router.post("/", summary="Adiciona tarefa", response_model=TaskDetails)
 async def create_task(
@@ -26,34 +32,16 @@ async def create_task(
     return await TaskService.create_task(user, data)
 
 
-@task_router.put("/{task_id}", summary="Atualiza uma tarefa", response_model=TaskDetails)
+@task_router.put("/{task_id}", summary="Atualiza tarefa", response_model=TaskDetails)
 async def update_task(
     task_id: UUID,
-    task_update: TaskUpdate,
-    user: User = Depends(get_current_user),
-) -> TaskDetails:
-    task = await TaskService.get_task_by_id(task_id)
-    if not task or task.owner.id != user.id:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Tarefa não encontrada."
-        )
-    
-    updated = await TaskService.update_task(task_id, task_update)
-    return updated
+    data: TaskUpdate,
+    user: User = Depends(get_current_user)):
+    return await TaskService.update_task(user, task_id, data)
 
-
-@task_router.delete("/{task_id}", summary="Deleta uma tarefa")
+@task_router.delete("/{task_id}", summary="Deleta tarefa")
 async def delete_task(
     task_id: UUID,
-    user: User = Depends(get_current_user),
-):
-    task = await TaskService.get_task_by_id(task_id)
-    if not task or task.owner.id != user.id:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Tarefa não encontrada."
-        )
-    
-    await TaskService.delete_task(task_id)
-    return {"detail": "Tarefa deletada com sucesso."}
+    user: User = Depends(get_current_user)):    
+    await TaskService.delete_task(user, task_id)
+    return None

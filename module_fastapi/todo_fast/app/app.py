@@ -11,6 +11,21 @@ from app.api.v1.router import router
 
 from contextlib import asynccontextmanager
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     client_db = AsyncIOMotorClient(settings.MONGO_CONNECTION_STRING)
@@ -34,13 +49,6 @@ async def lifespan(app: FastAPI):
         yield
     finally:
         client_db.close()
-
-
-app = FastAPI(
-    title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
-    lifespan=lifespan,
-)
 
 app.include_router(
     router, 
