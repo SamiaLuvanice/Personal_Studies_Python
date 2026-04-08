@@ -1,0 +1,1 @@
+& ..\..\.venv\Scripts\python.exe -m uvicorn teste:app --reload
