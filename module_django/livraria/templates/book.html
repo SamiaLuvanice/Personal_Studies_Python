@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2 class="text-center">{{ book.title }}</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ book.image.url }}" alt="{{ book.title }}" class="img-fluid" />
+        </div>
+        <div class="col-md-6">
+            <p><strong>Gênero:</strong> {{ book.genre }}</p>
+            <p><strong>Ano:</strong> {{ book.year }}</p>
+            <p><strong>Valor:</strong> R$ {{ book.value }}</p>
+            <p><strong>Descrição:</strong> {{ book.description }}</p>
+        </div>
+    </div>
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Voltar para a lista</a>
+    <a href="{% url 'update_book' id=book.id %}" class="btn btn-primary mt-3">Editar</a>
+    <a href="{% url 'delete_book' id=book.id %}" class="btn btn-danger">Excluir</a>
+{% endblock %}
